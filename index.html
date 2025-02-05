@@ -4,26 +4,6 @@
     <meta charset="UTF-8">
     <title>Nuestra Historia - San Valentín</title>
     <style>
-        /* Nuevos estilos para el confeti */
-        .confeti {
-            position: fixed;
-            width: 10px;
-            height: 10px;
-            background: #ff69b4;
-            clip-path: polygon(50% 0%, 60% 30%, 100% 50%, 60% 70%, 50% 100%, 40% 70%, 0% 50%, 40% 30%);
-            animation: explocion 3s ease-out forwards;
-            z-index: 1000;
-        }
-
-        @keyframes explocion {
-            0% {
-                transform: translate(0, 0) scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(var(--tx), var(--ty)) scale(0);
-                opacity: 0;
-            }
         body {
             margin: 0;
             overflow: hidden;
@@ -75,7 +55,7 @@
         }
 
         #video-container {
-            display: none; /* Oculto inicialmente */
+            display: none;
             position: relative;
             box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
             border-radius: 10px;
@@ -87,19 +67,6 @@
             max-height: 70vh;
         }
 
-        .heart {
-            position: absolute;
-            width: 20px;
-            height: 20px;
-            background: #ff4081;
-            animation: float 3s infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-20px); }
-        }
-
         #message {
             position: absolute;
             bottom: 20px;
@@ -107,6 +74,21 @@
             font-family: 'Arial', sans-serif;
             text-align: center;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .confeti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #ff69b4;
+            clip-path: polygon(50% 0%, 60% 30%, 100% 50%, 60% 70%, 50% 100%, 40% 70%, 0% 50%, 40% 30%);
+            animation: explocion 3s ease-out forwards;
+            z-index: 1000;
+        }
+
+        @keyframes explocion {
+            0% { transform: translate(0, 0) scale(1); opacity: 1; }
+            100% { transform: translate(var(--tx), var(--ty)) scale(0); opacity: 0; }
         }
     </style>
 </head>
@@ -136,75 +118,58 @@
     </audio>
 
     <script>
-    let scaleFactor = 1;
-    
-    document.getElementById('noBtn').addEventListener('click', function() {
-        scaleFactor *= 1.2;
-        document.getElementById('siBtn').style.transform = `scale(${scaleFactor})`;
+        let scaleFactor = 1;
         
-        // Mensajes divertidos al intentar decir que no
-        const mensajes = [
-            "¿segura? 😢",
-            "porfa :c",
-            "¿sabia que no me querías ? </3",
-            "mentira :c"
-        ];
-        alert(mensajes[Math.floor(Math.random() * mensajes.length)]);
-    });
+        document.getElementById('noBtn').addEventListener('click', function() {
+            scaleFactor *= 1.2;
+            document.getElementById('siBtn').style.transform = `scale(${scaleFactor})`;
+            const mensajes = [
+                "¿segura? 😢",
+                "porfa :c",
+                "¿sabia que no me querías ? </3",
+                "mentira :c"
+            ];
+            alert(mensajes[Math.floor(Math.random() * mensajes.length)]);
+        });
 
-    document.getElementById('siBtn').addEventListener('click', function() {
-        // Ocultar pantalla inicial
-        document.getElementById('initial-screen').style.display = 'none';
-        
-        // Mostrar video y elementos
-        document.getElementById('video-container').style.display = 'block';
-        
-        // Iniciar experiencia
-        const video = document.getElementById('myVideo');
-        const music = document.getElementById('backgroundMusic');
-        
-        video.play();
-        music.play();
-
-        // Configurar video en bucle
-        video.loop = true;
-    
-        // Iniciar confeti periódico
-        setInterval(crearConfeti, 5000); // Cada 5 segundos
-        crearConfeti(); // Primer estallido inmediato
-
-        // Función para crear confeti
-        function crearConfeti() {
-            const colores = ['#ff69b4', '#ff1493', '#c71585', '#db7093', '#ffb6c1'];
-            const cantidad = 50;
+        document.getElementById('siBtn').addEventListener('click', function() {
+            document.getElementById('initial-screen').style.display = 'none';
+            document.getElementById('video-container').style.display = 'block';
             
-            for (let i = 0; i < cantidad; i++) {
-                const confeti = document.createElement('div');
-                confeti.className = 'confeti';
+            const video = document.getElementById('myVideo');
+            const music = document.getElementById('backgroundMusic');
+            
+            video.play();
+            music.play();
+            video.loop = true;
+            
+            setInterval(crearConfeti, 5000);
+            crearConfeti();
+
+            function crearConfeti() {
+                const colores = ['#ff69b4', '#ff1493', '#c71585', '#db7093', '#ffb6c1'];
+                const cantidad = 50;
                 
-                // Posición aleatoria fuera del área del video
-                const posX = Math.random() * window.innerWidth;
-                const posY = Math.random() * window.innerHeight * 0.3;
-                
-                // Movimiento aleatorio
-                const angulo = (Math.random() * 360) * (Math.PI / 180);
-                const velocidad = 100 + Math.random() * 200;
-                const tx = Math.cos(angulo) * velocidad;
-                const ty = Math.sin(angulo) * velocidad;
-                
-                confeti.style.setProperty('--tx', `${tx}px`);
-                confeti.style.setProperty('--ty', `${ty}px`);
-                confeti.style.left = `${posX}px`;
-                confeti.style.top = `${posY}px`;
-                confeti.style.background = colores[Math.floor(Math.random() * colores.length)];
-                
-                document.body.appendChild(confeti);
-                
-                // Eliminar el elemento después de la animación
-                setTimeout(() => confeti.remove(), 3000);
+                for (let i = 0; i < cantidad; i++) {
+                    const confeti = document.createElement('div');
+                    confeti.className = 'confeti';
+                    const posX = Math.random() * window.innerWidth;
+                    const posY = Math.random() * window.innerHeight * 0.3;
+                    const angulo = (Math.random() * 360) * (Math.PI / 180);
+                    const velocidad = 100 + Math.random() * 200;
+                    const tx = Math.cos(angulo) * velocidad;
+                    const ty = Math.sin(angulo) * velocidad;
+                    
+                    confeti.style.setProperty('--tx', `${tx}px`);
+                    confeti.style.setProperty('--ty', `${ty}px`);
+                    confeti.style.left = `${posX}px`;
+                    confeti.style.top = `${posY}px`;
+                    confeti.style.background = colores[Math.floor(Math.random() * colores.length)];
+                    document.body.appendChild(confeti);
+                    setTimeout(() => confeti.remove(), 3000);
+                }
             }
-        }
-    }); // <-- Aquí estaba faltando cerrar el addEventListener del siBtn
-</script>
+        });
+    </script>
 </body>
 </html>
