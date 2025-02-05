@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Nuestra Historia - San Valentín</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: #ffebee;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Arial', cursive;
+        }
+
+        #initial-screen {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .question {
+            font-size: 2.5em;
+            color: #d32f2f;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.5em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        #siBtn {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        #noBtn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        #video-container {
+            display: none; /* Oculto inicialmente */
+            position: relative;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #myVideo {
+            max-width: 90vw;
+            max-height: 70vh;
+        }
+
+        .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: #ff4081;
+            animation: float 3s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        #message {
+            position: absolute;
+            bottom: 20px;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body>
+    <div id="initial-screen">
+        <div class="question">¿Quieres ser mi San Valentín? 💖</div>
+        <div class="btn-container">
+            <button class="btn" id="siBtn">¡Sí!</button>
+            <button class="btn" id="noBtn">¡No!</button>
+        </div>
+    </div>
+
+    <div id="video-container">
+        <video id="myVideo" controls>
+            <source src="nuestro-video.mp4" type="video/mp4">
+            Tu navegador no soporta videos HTML5.
+        </video>
+        <div id="message">
+            <h1>¡Feliz San Valentín, Mi Amor! 🌹</h1>
+            <p>Eres la mejor cosa que me ha pasado...</p>
+        </div>
+    </div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="cancion-romantica.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+
+    <script>
+        let scaleFactor = 1;
+        
+        document.getElementById('noBtn').addEventListener('click', function() {
+            scaleFactor *= 1.2;
+            document.getElementById('siBtn').style.transform = `scale(${scaleFactor})`;
+            
+            // Mensajes divertidos al intentar decir que no
+            const mensajes = [
+                "¿Segura? 😢",
+                "¡Vamos, inténtalo de nuevo! 😉",
+                "¿En serio? 💔",
+                "Mira que soy persistente... 😅",
+                "¡El no no es una opción! ❤️"
+            ];
+            alert(mensajes[Math.floor(Math.random() * mensajes.length)]);
+        });
+
+        document.getElementById('siBtn').addEventListener('click', function() {
+            // Ocultar pantalla inicial
+            document.getElementById('initial-screen').style.display = 'none';
+            
+            // Mostrar video y elementos
+            document.getElementById('video-container').style.display = 'block';
+            
+            // Iniciar experiencia
+            const video = document.getElementById('myVideo');
+            const music = document.getElementById('backgroundMusic');
+            
+            video.play();
+            music.play();
+            
+            // Crear corazones
+            function createHearts() {
+                const container = document.body;
+                for (let i = 0; i < 50; i++) {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDelay = Math.random() * 2 + 's';
+                    container.appendChild(heart);
+                }
+            }
+            createHearts();
+        });
+    </script>
+</body>
+</html>
