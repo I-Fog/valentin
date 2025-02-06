@@ -2,85 +2,147 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nuestra Historia - San Valentín</title>
     <style>
+        :root {
+            --color-primario: #d32f2f;
+            --color-secundario: #ff4081;
+        }
+
         body {
             margin: 0;
-            overflow: hidden;
+            overflow-x: hidden;
             background: #ffebee;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            height: 100vh;
-            font-family: 'Arial', cursive;
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
         }
 
         #initial-screen {
             text-align: center;
             padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
 
         .question {
-            font-size: 2.5em;
-            color: #d32f2f;
-            margin-bottom: 30px;
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            color: var(--color-primario);
+            margin: 20px 0;
+            padding: 0 15px;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
 
         .btn-container {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             justify-content: center;
+            flex-wrap: wrap;
+            padding: 0 15px;
         }
 
         .btn {
-            padding: 15px 30px;
+            padding: 12px 25px;
             border: none;
             border-radius: 25px;
-            font-size: 1.5em;
+            font-size: 1.2rem;
             cursor: pointer;
             transition: all 0.3s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            min-width: 120px;
         }
 
-        #siBtn {
-            background-color: #4CAF50;
-            color: white;
+        #siBtn { background-color: #4CAF50; color: white; }
+        #noBtn { background-color: #f44336; color: white; }
+
+        /* Contenedor principal del contenido */
+        #main-content {
+            width: 100%;
+            display: none; /* Oculto inicialmente */
+            flex-direction: column;
+            align-items: center;
         }
 
-        #noBtn {
-            background-color: #f44336;
-            color: white;
+        /* Mensaje superior para móviles */
+        #top-message {
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         #video-container {
-            display: none;
             position: relative;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
+            width: 100%;
+            max-width: 800px;
             border-radius: 10px;
             overflow: hidden;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);
         }
 
         #myVideo {
-            max-width: 90vw;
-            max-height: 70vh;
+            width: 100%;
+            height: auto;
+            display: block;
         }
 
-        #message {
-            position: absolute;
-            bottom: 20px;
-            color: white;
-            font-family: 'Arial', sans-serif;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        /* Estilos específicos para móvil */
+        @media (max-width: 768px) {
+            #video-container {
+                height: 70vh;
+                max-width: 100%;
+                border-radius: 0;
+            }
+            
+            #myVideo {
+                height: 100%;
+                object-fit: cover;
+            }
+
+            #top-message h1 {
+                font-size: 1.5rem;
+                margin: 0 0 10px 0;
+                color: var(--color-primario);
+            }
+
+            #top-message p {
+                font-size: 1rem;
+                margin: 0;
+            }
+        }
+
+        /* Estilos para desktop */
+        @media (min-width: 769px) {
+            #video-container {
+                margin: 20px;
+                height: 70vh;
+            }
+
+            #myVideo {
+                height: 100%;
+                object-fit: contain;
+            }
+
+            #message {
+                position: absolute;
+                bottom: 20px;
+                width: 100%;
+                text-align: center;
+                color: white;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            }
         }
 
         .confeti {
             position: fixed;
             width: 10px;
             height: 10px;
-            background: #ff69b4;
+            background: var(--color-secundario);
             clip-path: polygon(50% 0%, 60% 30%, 100% 50%, 60% 70%, 50% 100%, 40% 70%, 0% 50%, 40% 30%);
             animation: explocion 3s ease-out forwards;
             z-index: 1000;
@@ -101,14 +163,22 @@
         </div>
     </div>
 
-    <div id="video-container">
-        <video id="myVideo" controls>
-            <source src="valentin_video.mp4" type="video/mp4">
-            Tu navegador no soporta videos HTML5.
-        </video>
-        <div id="message">
+    <div id="main-content">
+        <div id="top-message">
             <h1>¡Feliz San Valentín, Mi Amor! 🌹</h1>
             <p>Eres la mejor cosa que me ha pasado...</p>
+        </div>
+        
+        <div id="video-container">
+            <video id="myVideo" controls>
+                <source src="valentin_video.mp4" type="video/mp4">
+                Tu navegador no soporta videos HTML5.
+            </video>
+            <!-- Mensaje solo para desktop -->
+            <div id="message">
+                <h1>¡Feliz San Valentín! 🌹</h1>
+                <p>Nuestra historia continúa...</p>
+            </div>
         </div>
     </div>
 
@@ -134,13 +204,13 @@
 
         document.getElementById('siBtn').addEventListener('click', function() {
             document.getElementById('initial-screen').style.display = 'none';
-            document.getElementById('video-container').style.display = 'block';
+            document.getElementById('main-content').style.display = 'flex';
             
             const video = document.getElementById('myVideo');
             const music = document.getElementById('backgroundMusic');
             
-            video.play();
-            music.play();
+            video.play().catch(error => console.log('Reproducción automática bloqueada'));
+            music.play().catch(error => console.log('Reproducción automática bloqueada'));
             video.loop = true;
             
             setInterval(crearConfeti, 5000);
